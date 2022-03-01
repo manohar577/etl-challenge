@@ -1,3 +1,5 @@
+import json
+
 productFile = open('products.txt', 'r',encoding="UTF-8")
 productLines = productFile.readlines()
 
@@ -7,7 +9,7 @@ targetLines = targetFile.readlines()
 targetValuesDict = {line.split("\t")[0] : line.rstrip().split("\t")[1] for line in targetLines}
 
 templeteList = [ templete for templete in productLines[0].rstrip().split("|")]
-
+productList = []
 for line in productLines[1:]:
     valuesList = [value for value in line.rstrip().split("|")]
     productDict = dict(zip(templeteList[:3], valuesList[:3] ))
@@ -16,3 +18,8 @@ for line in productLines[1:]:
     productDict["taxonomy"] = taxonomy
     productDict["targetValues"] = [targetValuesDict.get(item) for item in taxonomy]
     print (productDict)
+    productList.append(productDict)
+
+file1 = open("output.json", "w")
+file1.write(json.dumps(productList))
+file1.close()
